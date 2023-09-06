@@ -88,6 +88,7 @@ const App = () => {
           {item.name}
         </Text>
       </TouchableOpacity>
+      <Text style={styles.taskDescription}>{item.description}</Text>
       <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => deleteTask(item.id)}
@@ -194,6 +195,10 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     color: 'red',
+  },
+  taskDescription: {
+    fontSize: 14,
+    color: 'gray',
   },
 });
 
