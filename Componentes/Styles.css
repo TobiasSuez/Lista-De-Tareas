@@ -1,0 +1,83 @@
+.container {
+  flex: 1;
+  padding: 20px;
+  background-color: #0c3f6a;
+}
+
+.modalContainer {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #0c3f6a;
+}
+
+.input {
+  height: 40px;
+  width: 60%;
+  border-color: gray;
+  border-width: 1px;
+  margin-bottom: 10px;
+  /*padding-horizontal: 10px;*/
+  background-color: #31a8ae;
+}
+
+.addButton {
+  background-color: #31a8ae;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.addButtonText {
+  color: #f3f0cd;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.taskContainer {
+  flex-direction: row;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: gray;
+  /*padding-vertical: 10px;*/
+  background-color: #f3f0cd;
+  border-radius: 10px;
+}
+
+.taskButton {
+  flex: 1;
+}
+
+.taskName {
+  font-size: 22px;
+  flex: 1;
+}
+
+.completedTaskName {
+  text-decoration-line: line-through;
+  font-weight: bold;
+  color: gray;
+  border-radius: 10px;
+}
+
+.deleteButton {
+  margin-left: 10px;
+  background-color: red;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.deleteButtonText {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+}
+
+.taskDescription {
+  font-size: 18px;
+  color: gray;
+}

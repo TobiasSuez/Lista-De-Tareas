@@ -220,22 +220,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;*/
-
-import React, { useState, useEffect } from 'react';
+export default App;*/import React, { useState, useEffect } from 'react';
 import {
   View,
-  Modal,
-  TextInput,
-  TouchableOpacity,
   Text,
   StyleSheet,
+  TouchableOpacity,
+  Modal,
+  FlatList,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import TaskList from './TaskList';
-import styles from './styles'; // Importa los estilos desde un archivo compartido
+import Input from './Input';
+import Item from './Item';
 
-const TaskApp = () => {
+const App = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [taskName, setTaskName] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
@@ -296,6 +294,10 @@ const TaskApp = () => {
     }
   };
 
+  const renderTask = ({ item }) => (
+    <Item item={item} markTaskAsCompleted={markTaskAsCompleted} deleteTask={deleteTask} />
+  );
+
   return (
     <View style={styles.container}>
       <Modal
@@ -304,37 +306,99 @@ const TaskApp = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Nombre de la tarea"
-            value={taskName}
-            onChangeText={(text) => setTaskName(text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Descripción de la tarea"
-            value={taskDescription}
-            onChangeText={(text) => setTaskDescription(text)}
-          />
-          <TouchableOpacity style={styles.addButton} onPress={() => addTask()}>
-            <Text style={styles.addButtonText}>Agregar Tarea</Text>
-          </TouchableOpacity>
-        </View>
+        <Input
+          taskName={taskName}
+          taskDescription={taskDescription}
+          setTaskName={setTaskName}
+          setTaskDescription={setTaskDescription}
+          addTask={addTask}
+        />
       </Modal>
-      <TaskList
-        tasks={tasks}
-        markTaskAsCompleted={markTaskAsCompleted}
-        deleteTask={deleteTask}
+      <FlatList
+        data={tasks}
+        renderItem={renderTask}
+        keyExtractor={(item) => item.id}
       />
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => setModalVisible(true)}
-      >
+      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.addButtonText}>Agregar Tarea</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default TaskApp;
+const styles = StyleSheet.create({
+  
+    container: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: '#0c3f6a',
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 20,
+      backgroundColor: '#0c3f6a',
+    },
+    input: {
+      height: 40,
+      width: '60%',
+      borderColor: 'gray',
+      borderWidth: 1,
+      marginBottom: 10,
+      backgroundColor: '#31a8ae',
+    },
+    addButton: {
+      backgroundColor: '#31a8ae',
+      padding: 10,
+      borderRadius: 5,
+      marginTop: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    addButtonText: {
+      color: '#f3f0cd',
+      textAlign: 'center',
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
+    taskContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderBottomWidth: 1,
+      borderBottomColor: 'gray',
+      backgroundColor: '#f3f0cd',
+      borderRadius: 10,
+    },
+    taskButton: {
+      flex: 1,
+    },
+    taskName: {
+      fontSize: 22,
+      flex: 1,
+    },
+    completedTaskName: {
+      textDecorationLine: 'line-through',
+      fontWeight: 'bold',
+      color: 'gray',
+      borderRadius: 10,
+    },
+    deleteButton: {
+      marginLeft: 10,
+      backgroundColor: 'red',
+      padding: 5,
+      borderRadius: 5,
+    },
+    deleteButtonText: {
+      color: 'white',
+      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    taskDescription: {
+      fontSize: 18,
+      color: 'gray',
+    },  
+  
+});
+
+export default App;

@@ -6,7 +6,6 @@ import Aplicacion from './Componentes/Aplicacion';
 export default function App() {
   return (
     <Aplicacion/>
-
   );
 }
 
