@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+/*import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -87,8 +87,8 @@ const App = () => {
         >
           {item.name}
         </Text>
+        <Text style={styles.taskDescription}>{item.description}</Text>
       </TouchableOpacity>
-      <Text style={styles.taskDescription}>{item.description}</Text>
       <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => deleteTask(item.id)}
@@ -99,7 +99,9 @@ const App = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}
+    backgroundColor="orange">
+      
       <Modal
         animationType="slide"
         transparent={false}
@@ -146,60 +148,193 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#0c3f6a', 
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#0c3f6a', 
   },
   input: {
     height: 40,
-    width: '100%',
+    width: '60%',
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    backgroundColor: '#31a8ae',
   },
   addButton: {
-    backgroundColor: 'blue',
+    backgroundColor: '#31a8ae', 
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addButtonText: {
-    color: 'white',
+    color: '#f3f0cd',
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 16,
   },
   taskContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
     paddingVertical: 10,
+    backgroundColor: '#f3f0cd',
+    borderRadius: 10, 
   },
   taskButton: {
     flex: 1,
   },
   taskName: {
-    fontSize: 18,
+    fontSize: 22,
+    flex: 1,
   },
   completedTaskName: {
     textDecorationLine: 'line-through',
+    fontWeight: 'bold',
     color: 'gray',
+    borderRadius: 10,
   },
   deleteButton: {
     marginLeft: 10,
+    backgroundColor: 'red', 
+    padding: 5,
+    borderRadius: 5,
   },
   deleteButtonText: {
-    color: 'red',
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
+  
   taskDescription: {
-    fontSize: 14,
+    fontSize: 18,
     color: 'gray',
   },
 });
 
-export default App;
+export default App;*/
+
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import TaskList from './TaskList';
+import styles from './styles'; // Importa los estilos desde un archivo compartido
+
+const TaskApp = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [taskName, setTaskName] = useState('');
+  const [taskDescription, setTaskDescription] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  useEffect(() => {
+    saveTasks();
+  }, [tasks]);
+
+  const addTask = () => {
+    if (taskName.trim() === '') {
+      return;
+    }
+    const newTask = {
+      id: Date.now().toString(),
+      name: taskName,
+      description: taskDescription,
+      completed: false,
+    };
+    setTasks([...tasks, newTask]);
+    setTaskName('');
+    setTaskDescription('');
+    setModalVisible(false);
+  };
+
+  const markTaskAsCompleted = (taskId) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, completed: true } : task
+    );
+    setTasks(updatedTasks);
+  };
+
+  const deleteTask = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+  };
+
+  const saveTasks = async () => {
+    try {
+      await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
+    } catch (error) {
+      console.error('Error saving tasks to AsyncStorage:', error);
+    }
+  };
+
+  const loadTasks = async () => {
+    try {
+      const savedTasks = await AsyncStorage.getItem('tasks');
+      if (savedTasks !== null) {
+        setTasks(JSON.parse(savedTasks));
+      }
+    } catch (error) {
+      console.error('Error loading tasks from AsyncStorage:', error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre de la tarea"
+            value={taskName}
+            onChangeText={(text) => setTaskName(text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Descripción de la tarea"
+            value={taskDescription}
+            onChangeText={(text) => setTaskDescription(text)}
+          />
+          <TouchableOpacity style={styles.addButton} onPress={() => addTask()}>
+            <Text style={styles.addButtonText}>Agregar Tarea</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <TaskList
+        tasks={tasks}
+        markTaskAsCompleted={markTaskAsCompleted}
+        deleteTask={deleteTask}
+      />
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.addButtonText}>Agregar Tarea</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default TaskApp;

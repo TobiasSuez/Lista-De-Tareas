@@ -3,7 +3,7 @@
   "packagerPort": 19000,
   "expoServerNgrokUrl": "https://b8-g7f.anonymous.lista-de-tareas.exp.direct",
   "packagerNgrokUrl": "https://b8-g7f.anonymous.lista-de-tareas.exp.direct",
-  "ngrokPid": 17556,
+  "ngrokPid": 5672,
   "packagerPid": null,
-  "webpackServerPort": 19006
+  "webpackServerPort": null
 }
