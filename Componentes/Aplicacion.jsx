@@ -230,8 +230,8 @@ import {
   FlatList,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Input from './Input';
-import Item from './Item';
+import Input from './TaskInput';
+import Item from './TaskItem';
 
 const App = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -307,6 +307,7 @@ const App = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <Input
+          style={styles.input}
           taskName={taskName}
           taskDescription={taskDescription}
           setTaskName={setTaskName}
